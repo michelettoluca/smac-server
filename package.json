@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "npx tsc",
+		"build": "npx prisma generate && npx tsc && netlify deploy --prod",
 		"start": "node dist/netlify/functions/api.js",
-		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/netlify/functions/api.js\""
+		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/api.js\""
 	},
 	"keywords": [],
 	"author": "",
@@ -16,6 +16,7 @@
 		"body-parser": "^1.20.2",
 		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
+		"netlify-cli": "^16.1.0",
 		"node-cron": "^3.0.2",
 		"serverless-http": "^3.2.0",
 		"ws": "^8.13.0"

@@ -90,6 +90,6 @@ server.on("upgrade", (request, socket, head) => {
 	})
 })
 
-app.use("/api/", router)
+app.use("/.netlify/functions/api", router)
 
-export const handler = serverless(app)
+module.exports.handler = serverless(app)
