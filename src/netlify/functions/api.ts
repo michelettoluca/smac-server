@@ -4,6 +4,7 @@ import cron from "node-cron"
 import ws from "ws"
 import { PrismaClient, Reservation, ReservationStatus } from "@prisma/client"
 import bodyParser from "body-parser"
+import serverless from "serverless-http"
 
 dotenv.config()
 
@@ -11,6 +12,7 @@ const PORT = process.env.PORT
 
 const prisma = new PrismaClient()
 const app = express()
+const router = express.Router()
 const jsonParser = bodyParser.json()
 
 const webSocketServer = new ws.Server({ noServer: true })
@@ -58,7 +60,7 @@ async function updateLatestReservationStatus(status: ReservationStatus) {
 	})
 }
 
-app.put("/latest-reservation", jsonParser, async (req, res) => {
+router.put("/latest-reservation", jsonParser, async (req, res) => {
 	const { status } = req.body
 
 	const reservation = await updateLatestReservationStatus(status)
@@ -87,3 +89,7 @@ server.on("upgrade", (request, socket, head) => {
 		webSocketServer.emit("connection", socket, request)
 	})
 })
+
+app.use("/api/", router)
+
+export const handler = serverless(app)
